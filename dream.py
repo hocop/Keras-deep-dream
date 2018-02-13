@@ -10,9 +10,9 @@ from keras import backend as K
 model_size = 224
 classes = 1000
 amp_index = 0
-iterations = 50
+iterations = 100
 rate = 1e-2
-depth = 1
+depth = 2
 rgb = True
 
 _grad = None
@@ -30,7 +30,7 @@ def getGradFunc(model):
 	_inputs = Input(shape=(model_size,model_size,3))
 	_x = model(_inputs)
 	_errgrad = _x - _amplify
-	_errors = tf.reduce_sum(tf.square(_errgrad))
+	_errors = K.sum(K.square(_errgrad))
 	_grads = K.gradients(_errors, _inputs)
 	_grad = K.function([_inputs,_amplify], _grads)
 	return _grad
